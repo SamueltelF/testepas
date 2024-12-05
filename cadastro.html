@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script/script.js"></script> 
+</head>
+<body>
+    <main class="main">
+        <div class="apresentacao">
+            <p>Cadastro</p>
+            <h1 class="nome">Dev Connect</h1>   
+            <p class="texto">Bem vindo! Faça agora seu cadastro na melhor plataforma<br> de conexão para desenvolvedores ao redor do mundo.</p>
+        </div>
+       <div class="cadastro">
+  <form id="formCadastro">
+    <input class="caixinha" type="text" id="nome" placeholder="Digite seu nome completo" required><p></p>
+    <input class="caixinha" type="email" id="email" placeholder="Digite seu email" required><p></p>
+    <input class="caixinha" type="password" id="senha" placeholder="Digite sua senha" required><p></p>
+    <input class="caixinha" type="password" id="confirmarSenha" placeholder="Confirme sua senha" required><p></p>
+    <button type="submit" class="botao">Cadastre-se</button>
+  </form>
+  <p id="mensagem"></p>
+</div>
+</main>
+<script>
+  document.getElementById('formCadastro').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Evita o recarregamento da página
+
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+    const confirmarSenha = document.getElementById('confirmarSenha').value;
+    const mensagem = document.getElementById('mensagem');
+
+    // Validações básicas no frontend
+    if (senha !== confirmarSenha) {
+      mensagem.textContent = 'As senhas não coincidem.';
+      mensagem.style.color = 'red';
+      return;
+    }
+
+    if (senha.length < 6) {
+      mensagem.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+      mensagem.style.color = 'red';
+      return;
+    }
+
+    // Dados para enviar ao backend
+    const dados = { nome, email, senha };
+
+    try {
+      const resposta = await fetch('https://cosette.cloud/cadastro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados),
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        mensagem.textContent = resultado.message;
+        mensagem.style.color = 'green';
+        document.getElementById('formCadastro').reset(); // Limpa o formulário
+      } else {
+        mensagem.textContent = resultado.message;
+        mensagem.style.color = 'red';
+      }
+    } catch (erro) {
+      mensagem.textContent = 'Erro ao conectar ao servidor.';
+      mensagem.style.color = 'red';
+    }
+  });
+</script>
+    
+</body>
+</html>

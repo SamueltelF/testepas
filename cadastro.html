@@ -52,7 +52,7 @@
     const dados = { nome, email, senha };
 
     try {
-      const resposta = await fetch('br3.bronxyshost.com:4273/cadastro', {
+      const resposta = await fetch('http://br3.bronxyshost.com:4273/cadastro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dados),
